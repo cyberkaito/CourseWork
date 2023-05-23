@@ -1,0 +1,409 @@
+﻿@model PolyphoniaWeb.Models.AdminModel;
+<div class="container-fluid">
+    <div class="row bg-black">
+        <div class="col-10 table-responsive " id="tables">
+            <h3 class="py-4 text-center">Администрирование таблиц БД</h3>
+            
+                <table class="table table-dark table-hover" id="Channels">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                        <th class="break" scope="col">Avatar</th>
+                            <th scope="col">Rate</th>
+                            <th scope="col">Rate Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.Channels)
+                    {
+                        <tr id="@item.IdChannel">
+                            <th scope="row">@item.IdChannel</th>
+                            <td>@item.Name</td>
+                            <td>@item.Description</td>
+                            <td class="break">@item.Avatar</td>
+                            <td>@item.Rate</td>
+                            <td>@item.RateCount</td>
+                        </tr>
+                    }
+                    <form asp-controller="Admin" class="bg-dark" asp-action="addChannel" method="post" role="form">
+                        <tr>
+                        <th scope="row"><textarea id="id" name="data" type="text" placeholder="ID" class="form-control" ></textarea></th>
+                            <td><textarea id="data" name="data" type="text" placeholder="Name" class="form-control" ></textarea></td>
+                        <td><textarea id="data" name="data" type="text" placeholder="Description" class="form-control"></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="Avatar" class="form-control" ></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="Rate" class="form-control" ></textarea></td>
+                        <td><textarea id="data" name="data" type="text" placeholder="Rate Count" class="form-control"></textarea></td>
+                        </tr> 
+                        <tr>
+                            <td colspan="2">
+                                <button type="submit" onclick="add(this)"  name="data" class="btn w-100 btn-info btn-block mb-4">Добавить</button>
+                            </td>
+                            <td colspan="2">
+                                <button type="submit" onclick="update(this)" name="data" class="btn w-100 btn-primary btn-block mb-4">Обновить</button>
+                            </td>
+                            <td colspan="2">
+                                <button type="submit" onclick="remove(this)" name="data" class="btn w-100 btn-danger btn-block mb-4">Удалить</button>
+                            </td>
+                        </tr>
+                    </form>
+                    </tbody>  
+                </table>
+                <table class="table table-dark table-hover" id="Categories">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Categories)
+                        {
+                        <tr id=@item.IdCategory>
+                                <th scope="row">@item.IdCategory</th>
+                                <td>@item.Name</td>
+                            </tr>
+                        }
+                        <form asp-controller="Admin" class="bg-dark" asp-action="addCategory" method="post" role="form">
+                            <tr>
+                                <th scope="row"><textarea id="id" name="data" type="text" placeholder="ID" class="form-control" ></textarea></th>
+                                <td><textarea id="data" name="data" type="text" placeholder="Name" class="form-control" ></textarea></td>
+                            </tr>
+                            <tr>
+                                <td colspan="1">
+                                    <button type="submit" onclick="add(this)" name="data" class="btn w-100 btn-info btn-block mb-4">Добавить</button>
+                                </td>
+                                <td colspan="1">
+                                    <button type="submit" onclick="update(this)" name="data" class="btn w-100 btn-primary btn-block mb-4">Обновить</button>
+                                </td>
+                            </tr>
+                            <tr>
+                            <td colspan="2">
+                                <button type="submit" onclick="remove(this)" name="data" class="btn w-100 btn-danger btn-block mb-4">Удалить</button>
+                            </td>
+                            </tr>
+                        </form>
+                    </tbody>
+                </table>
+                <table class="table table-dark table-hover" id="Client">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Key</th>
+                            <th scope="col">Avatar</th>
+                            <th scope="col">Bio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Clients)
+                        {
+                        <tr id="@item.IdClient">
+                                <th scope="row">@item.IdClient</th>
+                                <td>@item.Name</td>
+                                <td>@item.Email</td>
+                                <td>@item.Key</td>
+                                <td>@item.Avatar</td>
+                                <td>@item.Bio</td>
+                            </tr>
+                        }
+                    <form asp-controller="Admin" class="bg-dark" asp-action="addClient" method="post" role="form">
+                        <tr>
+                            <th width="100px" scope="row"><textarea id="id" name="data" type="text" placeholder="ID" class="form-control" ></textarea></th>
+                            <td><textarea id="data" name="data" type="text" placeholder="Name" class="form-control" ></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="Email" class="form-control" ></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="Key" class="form-control" ></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="Avatar" class="form-control" ></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="Bio" class="form-control" ></textarea></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button type="submit" onclick="add(this)" name="data" class="btn w-100 btn-info btn-block mb-4">Добавить</button>
+                            </td>
+                            <td colspan="2">
+                                <button type="submit" onclick="update(this)" name="data" class="btn w-100 btn-primary btn-block mb-4">Обновить</button>
+                            </td>
+                            <td colspan="2">
+                                <button type="submit" onclick="remove(this)" name="data" class="btn w-100 btn-danger btn-block mb-4">Удалить</button>
+                            </td>
+                        </tr>
+                    </form>
+                    </tbody>
+                </table>
+                <table class="table table-dark table-hover" id="ClientType">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">ID_Client</th>
+                            <th scope="col">ID_Channel</th>
+                            <th scope="col">ID_Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ClientTypes)
+                        {
+                        <tr id="@item.IdClientType">
+                                <th scope="row">@item.IdClientType</th>
+                                <td>@item.IdClient</td>
+                                <td>@item.IdChannel</td>
+                                <td>@item.IdRole</td>
+                            </tr>
+                        }
+                        <form asp-controller="Admin" class="bg-dark" asp-action="addClientType" method="post" role="form">
+                            <tr>
+                                <th scope="row"><textarea id="id" name="data" type="text" placeholder="ID" class="form-control"></textarea></th>
+                                <td><textarea id="data" name="data" type="text" placeholder="ID Client" class="form-control" ></textarea></td>
+                                <td><textarea id="data" name="data" type="text" placeholder="ID Channel" class="form-control"></textarea></td>
+                                <td><textarea id="data" name="data" type="text" placeholder="ID Role" class="form-control"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button type="submit" onclick="add(this)" name="data" class="btn w-100 btn-info btn-block mb-4">Добавить</button>
+                                </td>
+                                <td colspan="2">
+                                    <button type="submit" onclick="update(this)" name="data" class="btn w-100 btn-primary btn-block mb-4">Обновить</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <button type="submit" onclick="remove(this)" name="data" class="btn w-100 btn-danger btn-block mb-4">Удалить</button>
+                                </td>
+                            </tr>
+                        </form>
+                    </tbody>
+                </table>
+                <table class="table table-dark table-hover" id="Comment">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">ID_Client</th>
+                            <th scope="col">ID_News</th>
+                            <th scope="col">Text</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Comments)
+                        {
+                        <tr id="@item.IdComment">
+                                <th scope="row">@item.IdComment</th>
+                                <td>@item.IdClient</td>
+                                <td>@item.IdNews</td>
+                                <td>@item.Text</td>
+                            </tr>
+                        }
+                        <form asp-controller="Admin" class="bg-dark" asp-action="addComments" method="post" role="form">
+                            <tr>
+                                <th scope="row"><textarea id="id" name="data" type="text" placeholder="ID" class="form-control"></textarea></th>
+                                <td><textarea id="data" name="data" type="text" placeholder="ID Client" class="form-control"></textarea></td>
+                                <td><textarea id="data" name="data" type="text" placeholder="ID News" class="form-control"></textarea></td>
+                                <td><textarea id="data" name="data" type="text" placeholder="Text comment" class="form-control"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button type="submit" onclick="add(this)" name="data" class="btn w-100 btn-info btn-block mb-4">Добавить</button>
+                                </td>
+                                <td colspan="2">
+                                    <button type="submit" onclick="update(this)" name="data" class="btn w-100 btn-primary btn-block mb-4">Обновить</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <button type="submit" onclick="remove(this)" name="data"  class="btn w-100 btn-danger btn-block mb-4">Удалить</button>
+                                </td>
+                            </tr>
+                        </form>
+                    </tbody>
+                </table>
+                <table class="table table-dark table-hover" id="Media">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Link</th>
+                            <th scope="col">ID_News</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Media)
+                        {
+                        <tr id="@item.IdMedia">
+                                <th scope="row">@item.IdMedia</th>
+                            <td class="break">@item.Link</td>
+                                <td>@item.IdNews</td>
+                            </tr>
+                        }
+                    <form asp-controller="Admin" class="bg-dark" asp-action="addMedia" method="post" role="form">
+                        <tr>
+                            <th scope="row"><textarea id="id" name="data" type="text" placeholder="ID" class="form-control"></textarea></th>
+                            <td><textarea id="data" name="data" type="text" placeholder="Link" class="form-control"></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="ID News" class="form-control"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">
+                                <button type="submit" onclick="add(this)" name="data" class="btn w-100 btn-info btn-block mb-4">Добавить</button>
+                            </td>
+                            <td colspan="1">
+                                <button type="submit" onclick="update(this)" name="data" class="btn w-100 btn-primary btn-block mb-4">Обновить</button>
+                            </td>
+                            <td colspan="1">
+                                <button type="submit" onclick="remove(this)" name="data" class="btn w-100 btn-danger btn-block mb-4">Удалить</button>
+                            </td>
+                        </tr>
+                        </form>
+                    </tbody>
+                </table>
+                <table class="table table-dark table-hover" id="News">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Header</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Rate</th>
+                            <th scope="col">Rate Count</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">ID_Category</th>
+                            <th scope="col">ID_Channel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.News)
+                        {
+                        <tr id="@item.IdNews">
+                                <th scope="row">@item.IdNews</th>
+                                <td>@item.Header</td>
+                                <td>@item.Description</td>
+                                <th scope="col">@item.Rate</th>
+                                <th scope="col">@item.Rate </th>
+                                <th scope="col">@item.Date</th>
+                                <th scope="col">@item.IdCategory</th>
+                                <th scope="col">@item.IdChannel</th>
+                            </tr>
+                        }
+                    <form asp-controller="Admin" class="bg-dark" asp-action="addNews" method="post" role="form">
+                        <tr>
+                            <th scope="row"><textarea id="id" name="data" type="text" placeholder="ID" class="form-control"></textarea></</th>
+                            <td><textarea id="data" name="data" type="text" placeholder="Header" class="form-control"></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="Description" class="form-control"></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="Rate" class="form-control"></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="Rate" class="form-control"></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="Rate Count" class="form-control"></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="ID Category" class="form-control"></textarea></td>
+                            <td><textarea id="data" name="data" type="text" placeholder="ID Channel" class="form-control"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button type="submit" onclick="add(this)" name="data" class="btn w-100 btn-info btn-block mb-4">Добавить</button>
+                            </td>
+                            <td colspan="3">
+                                <button type="submit" onclick="update(this)" name="data" class="btn w-100 btn-primary btn-block mb-4">Обновить</button>
+                            </td>
+                            <td colspan="2">
+                                <button type="submit" onclick="remove(this)" name="data" class="btn w-100 btn-danger btn-block mb-4">Удалить</button>
+                            </td>
+                        </tr>
+                    </form>
+                    </tbody>
+                </table>
+                <table class="table table-dark table-hover" id="Role">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Roles)
+                        {
+                        <tr id="@item.IdRole">
+                                <th scope="row">@item.IdRole</th>
+                                <td>@item.Name</td>
+                            </tr>
+                        }
+                    <form asp-controller="Admin" class="bg-dark" asp-action="addRole" method="post" role="form">
+                        <tr>
+                            <th scope="row"><textarea id="id" name="data" type="text" placeholder="ID" class="form-control"></textarea></th>
+                        <td><textarea id="data" name="data" type="text" placeholder="Name" class="form-control"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td colspan="1">
+                                <button type="submit" onclick="add(this)" name="data" class="btn w-100 btn-info btn-block mb-4">Добавить</button>
+                            </td>
+                            <td colspan="1">
+                                <button type="submit" onclick="update(this)" name="data" class="btn w-100 btn-primary btn-block mb-4">Обновить</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button type="submit" onclick="remove(this)" name="data" class="btn w-100 btn-danger btn-block mb-4">Удалить</button>
+                            </td>
+                        </tr>
+                    </form>
+                    </tbody>
+                </table>
+        </div>
+        <div class="col-2 my-5 editpanel">
+            <a class="btn my-1 me-2 mt-5 btn-indigo" >Каналы</a>
+            <a class="btn my-1 me-2 btn-indigo" >Категории</a>
+            <a class="btn my-1 me-2 btn-indigo" >Клиенты</a>
+            <a class="btn my-1 me-2 btn-indigo" >Тип клиента</a>
+            <a class="btn my-1 me-2 btn-indigo" >Комментарии</a>
+            <a class="btn my-1 me-2 btn-indigo" >Медиа</a>
+            <a class="btn my-1 me-2 btn-indigo" >Новости</a>
+            <a class="btn my-1 me-2 btn-indigo">Роли</a>
+        </div>
+    </div>
+</div>
+<script>
+    $('#tables table').addClass("d-none");
+    $('#Channels').removeClass("d-none");
+    $('.editpanel .btn').on('click', function(){
+        $('#tables table').addClass("d-none");
+        switch($(this).text()){
+            case 'Каналы':
+                $("#Channels").removeClass("d-none");
+                break;
+            case 'Категории':
+                $("#Categories").removeClass("d-none");
+                break;
+            case 'Клиенты':
+                $("#Client").removeClass("d-none");
+                break;
+            case 'Тип клиента':
+                $("#ClientType").removeClass("d-none");
+                break;
+            case 'Комментарии':
+                $("#Comment").removeClass("d-none");
+                break;
+            case 'Медиа':
+                $("#Media").removeClass("d-none");
+                break;
+            case 'Новости':
+                $("#News").removeClass("d-none");
+                break;
+            case 'Роли':
+                $("#Role").removeClass("d-none");
+                break;
+        }   
+    });
+    function add(th){
+        $(th).attr("value","Добавить");
+    }
+    function update(th){
+         $(th).attr("value", "Обновить");
+    }
+    function remove(th) {
+        $(th).attr("value", "Удалить");
+    }
+    $(".table #id").on("mouseleave", function(){
+        var id = $(this).val();
+        var dataList = [];
+        $(this).parent().parent().parent().find("tr#" + id + " > td, tr#" + id + " > th" ).each(function(index, element){
+            dataList.push($(element).text());
+        })
+        $(this).parent().parent().find('textarea').each(function(index, element){
+            $(element).val(dataList[index]);
+        });
+    });
+</script>
+

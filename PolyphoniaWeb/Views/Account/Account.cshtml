@@ -1,0 +1,263 @@
+﻿@model PolyphoniaWeb.Models.AccountModel;
+<div class="container bg-dark account mt-5">
+    @*Кнопки для профиля*@
+    <div class="row my-3">
+        <div class="col-10">
+            <a class="btn btn-black text-white" onclick="profileBtn()">Профиль</a>
+            <a class="btn btn-black text-white" href="/Profile/Profile?ID=@ClientData.ID">Посмотреть профиль</a>
+            <a class="btn btn-black text-white" onclick="channelBtn()">Канал</a>
+        </div>
+    </div>
+    
+    <div class="row" id="profile">
+        @*форма изменения профиля*@
+        <form asp-controller="Account" asp-action="editProfile" method="post" role="form">
+            <div class="mb-3">
+                <label for="Name" class="form-label">Никнейм</label>
+                <input id="Name" name="data" type="text" class="form-control" value="@ClientData.Name" required>
+            </div>
+            <div class="mb-3">
+                <label for="Email" class="form-label">Почта (логин)</label>
+                <input id="Email" name="data" type="email" class="form-control" value="@ClientData.Email" required>
+            </div>    
+            <div class="mb-3">
+                <label for="Key" class="form-label">Пароль</label>
+                <input id="Key" name="data" type="password" class="form-control" value="@ClientData.Key" required>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-10">
+                        <label for="Link" class="form-label">Фото профиля</label>
+                        <textarea id="Link" name="data" type="text" placeholder="Вставьте ссылку на фото" class="form-control" >@ClientData.Avatar</textarea>
+                        <a class="btn btn-sm btn-warning float-end my-1" onclick="changeImage()">Обновить</a>
+                    </div>
+                    <div class="col-2">
+                        <span class="rounded-circle h-100 w-75 d-block overflow-hidden">
+                            <img class="img-circle" id="imgLink" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="Bio" class="form-label">Описание профиля</label>
+                <textarea id="Bio" name="data" type="text" placeholder="Краткая информация о себе" class="form-control">@ClientData.Bio</textarea>
+            </div>
+            <button type="submit" class="btn w-100 btn-warning btn-block mb-4">Обновить данные профиля</button>
+        </form>
+        <form asp-action="deleteProfile" asp-controller="Account">
+            <div class="mb-3">
+                <button type="submit" class="btn w-100 btn-danger btn-block mb-4">Удалить профиль</button>
+            </div>
+        </form>
+        <!-- Модальное окно -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Удаление канала</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Отмена"></button>
+                    </div>
+                    <div class="modal-body">
+                        Вы действительно хотите удалить канал?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <form asp-controller="Account" asp-action="deleteProfile" method="post" role="form">
+                            <input type="hidden" data="Model.ClientData.ID" />
+                            <button type="button" class="btn btn-danger">Да</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row bg-dark" id="channel">
+        @{var channelID = Model.ClientTypes.FirstOrDefault(n => n.IdClient == ClientData.ID && n.IdRole == 2,null);}
+        @if (channelID != null)
+        {
+            var channel = Model.Channels.FirstOrDefault(n => n.IdChannel == channelID.IdChannel);
+            <div class="col-10" id="channelSettings">
+                @*Форма редактирования канала*@
+                <form asp-controller="Account" asp-action="editChannel" method="post" role="form">
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Название</label>
+                        <input id="Name" name="data" type="text" class="form-control" value="@channel.Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Desc" class="form-label">Описание канала</label>
+                        <textarea id="Desc" name="data" type="text" class="form-control" required>@channel.Description</textarea>
+                    </div>
+                    <div>
+                        <div class="row">
+                            <div class="col-10">
+                                <label for="LinkChannel" class="form-label">Фото канала</label>
+                                <textarea id="LinkChannel" name="data" type="text" placeholder="Вставьте ссылку на фото" class="form-control">@channel.Avatar</textarea>
+                                <a class="btn btn-sm btn-warning float-end my-2" onclick="changeChannelImage()">Обновить</a>
+                            </div>
+                            <div class="col-2 px-3">
+                                <span class="rounded-circle h-100 w-100 d-block overflow-hidden">
+                                    <img class="img-circle" id="imgChannelLink" />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" name="data" class="btn w-100 btn-warning btn-block mb-4">Обновить данные канала</button>
+                </form>
+            </div>
+            
+            var subscribers = Model.ClientTypes.FindAll(n => n.IdChannel == channelID.IdChannel && n.IdRole == 1).Count;
+            var posts = Model.News.FindAll(n => n.IdChannel == channelID.IdChannel);
+            var postsCount = posts.Count;
+            var mediaCount = 0;
+            @foreach (var item in posts)
+            {
+                foreach (var med in item.Media)
+                {
+                    if (med.IdNews == item.IdNews)
+                    {
+                        mediaCount += 1;
+                    }
+                }
+            }
+        
+            @*Раздел статистики*@
+            <div class="col-10" id="channelStatistics">
+                <h3 class="text-center">Статистика канала</h3>
+                <p>Подписчики: @subscribers</p>
+                @if (channel.Rate != 0 && channel.RateCount != 0)
+                {
+                    <p>Рейтинг:@Math.Round(Convert.ToDecimal(channel.Rate / channel.RateCount),1)  из @channel.RateCount голосов</p>
+                }
+                <p>Постов всего: @postsCount</p>
+                <p>Медиа-ссылок: @mediaCount</p>
+            </div>
+            @*Раздел добавления статьи*@
+            <div class="col-10" id="addPost">
+                <input id="photoLinkBlank" name="Links" type="text" class="form-control my-2" hidden>
+                <form id="ArticleForm" asp-controller="Account" asp-action="addPost" method="post" role="form">
+                    <input name="data" value="@channelID.IdChannel" hidden />
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Заголовок</label>
+                        <input id="Name" name="data" type="text" class="form-control">
+                    </div>
+                    <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-html="true" title="Чтобы вставить картинку, пропишите img в нужном месте(Не более 5 картинок)">
+                        <textarea name="data" onkeyup="textAreaAdjust(this)" style="overflow:hidden;height:500px;" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"></textarea>
+                        <label for="floatingTextarea2">Текст статьи</label>
+                    </div>
+                    <div class="mb-3 links">
+                        <label for="photoLink">Ссылка на медиа</label>
+                        <input id="photoLink" name="Links" type="text" class="form-control my-2">
+                    </div>
+                    <a onclick="addInputPhoto(this)" class="btn btn-info float-end">Добавить поле для ссылки</a>
+                    <div class="mb-3 d-inline-block">
+                        <label for="Category" class="form-label">Категория</label>
+                        <input id="Category" name="data" type="text" class="form-control" hidden>
+                        <input id="CategoryName" type="text" class="form-control" disabled>
+                    </div>
+                    <div class="dropdown d-inline-flex">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                            Выбрать категорию
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+                            @foreach( var item in Model.Categories){
+                                if(item.Name != "Сбросить" & item.Name != "Статьи сообщества"){
+                                    <li class="px-0"><a class="dropdown-item text-white" onclick="selectCategory(this)" data="@item.IdCategory">@item.Name</a></li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <button type="submit" class="btn w-100 btn-warning btn-block mb-4">Добавить пост</button>
+                </form>
+            </div>
+            @*Панель кнопок для канала*@
+            <div class="col-2 my-4 editpanel">
+                <a class="btn btn-block my-1 me-2 btn-indigo active" onclick="channelSettings()">Настройки канала</a>
+                <a class="btn btn-block my-1 me-2 btn-indigo" onclick="addPost()">Добавить запись</a>
+                <a class="btn btn-block my-1 me-2 btn-indigo" onclick="channelStatistics()">Статистика канала</a>
+                <a class="btn btn-block my-1 me-2 btn-indigo" href="/Channel/Channel?ID=@channel.IdChannel">Просмотр канала</a>
+                <form asp-controller="Account" asp-action="deleteChannel" method="post" role="form">
+                    <input type="hidden" name="data" value="@channelID.IdChannel" />
+                    <button type="submit" class="btn w-100 my-1 btn-danger btn-block mb-4">Удалить канал</button>
+                </form>
+            </div>
+        }
+        @*Блок, если канала нет*@
+        else{
+            <a class="btn btn-black text-light" onclick="addChannel(this)" >Добавить канал</a>
+            <div class="col-10" id="addChannel">
+                <form asp-controller="Account" asp-action="addChannel" method="post" role="form">
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Название</label>
+                        <input id="Name" name="data" type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Desc" class="form-label">Описание канала</label>
+                        <textarea id="Desc" name="data" type="text" class="form-control"></textarea>
+                    </div>
+                    <div>
+                        <div class="row">
+                            <div class="col-10">
+                                <label for="LinkChannel" class="form-label">Фото канала</label>
+                                <textarea id="LinkChannel" name="data" type="text" placeholder="Вставьте ссылку на фото" class="form-control"></textarea>
+                                <a class="btn btn-sm btn-warning float-end my-2" onclick="changeChannelImage()">Обновить</a>
+                            </div>
+                            <div class="col-2 px-3">
+                                <span class="rounded-circle h-100 w-100 d-block overflow-hidden">
+                                    <img class="img-circle" id="imgChannelLink" />
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" name="data" class="btn w-100 btn-warning btn-block mb-4">Создать канал</button>
+                </form>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    $('#channel').addClass("d-none");
+    function changeImage(){
+        $("#imgLink").css("background", "url(" + $("#Link").val() + ")");
+    }
+    function changeChannelImage() {
+        $("#imgChannelLink").css("background", "url(" + $("#LinkChannel").val() + ")");
+    }
+    function profileBtn() {
+        $('#channel').addClass("d-none");
+        $('#profile').removeClass("d-none");
+    }
+    function channelBtn() {
+        $('#channel').removeClass("d-none");
+        $('#profile').addClass("d-none");
+        $('#channel > .col-10').addClass("d-none");
+        $('#channelSettings').removeClass("d-none");
+    }
+    function channelSettings(){
+        $('#channel > .col-10').addClass("d-none");
+        $('#channelSettings').removeClass("d-none");
+    }
+    function addPost(){
+        $('#channel > .col-10').addClass("d-none");
+        $('#addPost').removeClass("d-none");
+    }
+    function channelStatistics(){
+        $('#channel > .col-10').addClass("d-none");
+        $('#channelStatistics').removeClass("d-none");
+    }
+    function addChannel(th){
+        $(th).toggle();
+        $('#addChannel').removeClass("d-none");
+    }
+    function selectCategory(th) {
+        $(".dropdown-menu li a").removeClass("active");
+        $(th).addClass("active");
+        $("#CategoryName").attr("value", $(th).text());
+        $("#Category").attr("value", $(th).attr("data"));
+    }
+    function textAreaAdjust(element) {
+        element.style.height = "1px";
+        element.style.height = (25 + element.scrollHeight) + "px";
+    }
+</script>

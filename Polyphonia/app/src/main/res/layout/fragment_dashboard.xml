@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.dashboard.DashboardFragment">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#D8FFFFFF"
+        android:textColor="#fff"
+        app:defaultQueryHint="Поиск каналов или пользователей"
+        android:hint="Поиск каналов или пользователей"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:searchIcon="@drawable/ic_baseline_search_24" />
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        app:dividerColor="#303030"
+        app:dividerThickness="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"/>
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchBar"
+        style="@style/TextAppearance.AppCompat.Widget.Switch"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="#E8E8E8"
+        android:paddingLeft="15dp"
+        android:background="#000000"
+        android:text="Пользователи"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/switchBar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dashboardRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/switchBar"
+            />
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

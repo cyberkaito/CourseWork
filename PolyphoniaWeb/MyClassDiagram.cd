@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="PolyphoniaWeb.Controllers.AccountController">
+    <Position X="2" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAQAQIAAAABAAAAAAAAAAAAAgAAAAAAAEA=</HashCode>
+      <FileName>Controllers\AccountController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Controllers.AdminController">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAIACQIQAEAAAAAQAAQAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Controllers\AdminController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Controllers.ChannelController">
+    <Position X="0.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\ChannelController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Controllers.HomeController">
+    <Position X="12.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQCQAAAAAAAAAAEABAAQAAACEAAAAAEAA=</HashCode>
+      <FileName>Controllers\HomeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Controllers.LoginupController">
+    <Position X="5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAQAAAAAAAAQAIAAAAAABAAAAAAAQAAAAA=</HashCode>
+      <FileName>Controllers\LoginupController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.AccountModel">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAABAgAAAAEAAAAAAAAAAAMAQ=</HashCode>
+      <FileName>Models\AccountModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.AdminModel">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAACAAAAAgAgAAEAAAAAAAAAAAMAQ=</HashCode>
+      <FileName>Models\AdminModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.ArticleNews">
+    <Position X="8" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAQAAAAAAAAAAAiAAAAAAAAAAAAAAAAAAAAABIAA=</HashCode>
+      <FileName>Models\ArticleNews.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.Category">
+    <Position X="12.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAABAAIAA=</HashCode>
+      <FileName>Models\Category.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.Channel">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAEAAAAAAAAoAAAAABQAAAQgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Channel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.ChannelModel">
+    <Position X="6.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAABACAAAAAgAAAAEAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Models\ChannelModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.ChannelsModel">
+    <Position X="3.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAAgAgAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Models\ChannelsModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.Client">
+    <Position X="2" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAQACAQAAAQgAAAAAAAAAAAABAAAIAA=</HashCode>
+      <FileName>Models\Client.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.ClientData">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAgAQACAQAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ClientData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.ClientType">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAoAAAAAAAIAAAQAAAAAAAAAAAAAAAAAAAABAABgAA=</HashCode>
+      <FileName>Models\ClientType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.Comment">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAIAAAAAAAAAAAAEAAAIADAAAAAA=</HashCode>
+      <FileName>Models\Comment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.Media">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAIAAAAAAAAAAAAAAAAIAQAAAAAA=</HashCode>
+      <FileName>Models\Media.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.News">
+    <Position X="14" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>RAAAAAAAAAAoAAQAABAAAAAAAAAAAAABAAIAAAAAoAQ=</HashCode>
+      <FileName>Models\News.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.NewsMediaCategory">
+    <Position X="14" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAACAAAAAgAAAAAAAAAAAAAAAACAQ=</HashCode>
+      <FileName>Models\NewsMediaCategory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.PolyphoniaDatabaseContext">
+    <Position X="15.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAQAAAAACAAAAAgEgAAEAAAAAAAAAAAMAQ=</HashCode>
+      <FileName>Models\PolyphoniaDatabaseContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PolyphoniaWeb.Models.Role">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAAQgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Role.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

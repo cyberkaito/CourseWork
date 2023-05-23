@@ -1,0 +1,84 @@
+﻿@model PolyphoniaWeb.Models.ChannelsModel;
+@{
+    ViewData["Title"] = "Каналы | Polyphonia";
+}
+<div class="container my-5 ">
+    <div class="row">
+        <div class="col-9 channels bg-dark">            
+            @foreach (var item in Model.Channels){
+                var subscribers = Model.ClientTypes.FindAll(n => n.IdChannel == item.IdChannel && n.IdRole == 1).Count;
+                <div class="row py-2 pb-0">
+                        <div class="col-2">
+                            <span class="rounded-circle d-block overflow-hidden">
+                            <img width="120px" height="120px" class="img-circle" style="background: url(@item.Avatar)" />
+                            </span>
+                        </div>
+                    <div class="col-10">
+                        <div class="col-11 my-3">
+                            <h2 class="card-title d-flex align-items-center justify-content-between">@item.Name
+                                <span class="fs-4 m-3 my-0 rating">
+                                    @if (@item.RateCount != 0)
+                                    {
+                                        @Math.Round(Convert.ToDecimal(@item.Rate / @item.RateCount))
+                                        <i class="fa-solid fa-star" style="color: #eeff00;"></i>
+                                    }else{
+                                        <span>0</span>
+                                        <i class="fa-solid fa-star" style="color: #eeff00;"></i>
+                                    }
+                                </span>
+                            </h2>
+                            <h6 class="card-subtitle">Подписчики: @subscribers</h6>
+                        </div>
+                        <div class="col-11">
+                            <p class="mb-auto fs-6 w-100">@item.Description</p>
+                        </div>
+                        <div class="col-11 text-end">
+                            <a href="/Channel/Channel?ID=@item.IdChannel" role="button" class="btn btn-info bg-lg"> Посмотреть </a>
+                        </div>
+                    </div>
+                    <hr class="my-4 mb-0" />
+                </div> 
+            }
+        </div>
+        <div class="col-9 channels d-none bg-dark">
+            @foreach (var item in Model.Clients)
+            {
+                <div class="row">
+                    <div class="col-2">
+                        <span class="rounded-circle h-100 d-block overflow-hidden">
+                            <img class="img-circle" src="@item.Avatar" />
+                        </span>
+                    </div>
+                    <div class="col-10">
+                        <div class="col-11">
+                            <p class="mb-auto fs-6 w-100">@item.Bio</p>
+                        </div>
+                        <div class="col-11 text-end">
+                            <a role="button" class="btn btn-info bg-lg"> Посмотреть </a>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            }
+        </div>
+        <div class="col-3 channels-panel bg-black py-3">
+            <div class="form-check form-switch py-2">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchUsers" checked />
+                <label class="form-check-label px-3 fs-5" for="flexSwitchCheckDefault">Каналы</label>
+            </div>
+            <div class="form-check form-switch  py-2">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchUsers" />
+                <label class="form-check-label px-3 fs-5" for="flexSwitchCheckDefault">Пользователи</label>
+            </div>
+            <div class="form-check form-switch  py-2">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchRate" />
+                <label class="form-check-label px-3 fs-5" for="flexSwitchCheckDefault">По рейтингу</label>
+            </div>
+            <div class="form-check form-switch  py-2">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchSubs" />
+                <label class="form-check-label px-3 fs-5" for="flexSwitchCheckDefault">Мои</label>
+            </div>
+        </div>
+    </div>
+    
+</div>

@@ -1,0 +1,103 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="shortcut icon" href="~/img/Group 4.png" type="image/x-icon">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/PolyphoniaWeb.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid header">
+        <header class="blog-header py-2">
+            <div class="row flex-nowrap justify-content-between align-items-center">
+                <div class="col-1 text-center">
+                    <a class="navbar-brand" asp-action="Index" asp-controller="Home">
+                        <img src="~/img/Group 4.png" height="50"/>
+                    </a>
+                </div>
+                <div class="col-9 text-center">
+                    <a class="navbar-brand" asp-action="Index" asp-controller="Home">
+                        <h4>Polyphonia</h4>
+                    </a>
+                </div>
+            @{
+                if (!HttpContextAccessor.HttpContext.Session.Keys.Contains("AuthUser")){
+                    <div class="col-2 pe-5 d-flex justify-content-end align-items-center">
+                        <a class="btn btn-sm me-2 btn-outline-secondary" onclick="showSignup()">Зарегистрироваться</a>
+                        <a class="btn btn-sm btn-outline-secondary" onclick="showLogin()">Войти</a>
+                    </div>
+                }else{
+                    <div class="col-2 pe-5 d-flex justify-content-end align-items-center">
+                            <a class="btn btn-sm me-2 btn-outline-secondary" asp-action="Account" asp-controller="Account">Профиль</a>
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="Logout" asp-controller="Loginup">Выйти</a>
+                    </div>
+                }
+            }
+            </div>
+        </header>
+        <hr style="margin:0px" />
+        <div class="nav-scroller">
+            <ul class="nav d-flex headerList">
+                <li><a class="link-secondary" asp-action="Index" asp-controller="Home">Статьи</a></li>
+                <li><a class="link-secondary" asp-action="Channels" asp-controller="Home">Каналы</a></li>
+                <form class="d-flex w-70 justify-content-end my-2">
+                    <input class="form-control me-2 w-75" type="search" placeholder="Поиск каналов, статей, пользователей" aria-label="Search">
+                </form>
+            </ul>
+        </div>
+</div>
+    @RenderBody()
+
+    <section class="w-100 p-4 d-flex h-100 justify-content-center pb-4 loginup">
+        
+        <form asp-controller="Loginup" class="bg-black needs-validation" asp-action="LogUp" method="post" role="form" novalidate>
+            <div class="position-relative">
+                <a onclick="closeForm()" class="position-absolute top-0 end-0 text-light">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                    </svg>
+                </a>
+            </div>
+            <h3 class="text-center text-light">Регистрация</h3>
+            <div class="form-outline mb-4">
+                <input id="validationServer01Feedback" name="data" type="text" placeholder="Username" class="form-control pe-5" required />
+                <div id="validationServer01Feedback" class="invalid-feedback">
+                    Укажите имя пользователя
+                </div>
+            </div>
+            <div class="form-outline mb-4">
+                <input id="validationServer02Feedback" name="data" type="email" placeholder="Email address" class="form-control pe-5" required />
+                <div id="validationServer02Feedback" class="invalid-feedback">
+                    Укажите почту
+                </div>
+            </div>
+            <div class="form-outline mb-4">
+                <input id="validationServer03Feedback" name="data" type="password" placeholder="Password" class="form-control pe-5" required />
+                <div id="validationServer03Feedback" class="invalid-feedback">
+                    Укажите пароль больше 8 символов с использованием латинских букв, спец. символов и цифр.
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col d-flex justify-content-center">
+                    <div class="form-check text-light">
+                            <input class="form-check-input" type="checkbox" name="data" id="data loginupform" />
+                            <label class="form-label" for="loginupform"> Восстановить пароль </label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn w-100 btn-primary btn-block mb-4">Зарегистрироваться</button>
+        </form>
+    </section>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

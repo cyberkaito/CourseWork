@@ -1,0 +1,140 @@
+﻿@model PolyphoniaWeb.Models.NewsMediaCategory;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Главная | Polyphonia";
+}
+<div class="container-fluid">
+    <div class="row  block">
+        <h3>Фильтр по категориям</h3>
+        <div class="d-inline-flex flex-row filters align-items-center justify-content-around">
+            @foreach (var item in Model.Category)
+            {
+                <div>
+                    <button class="btn btn-outline-info filter" id="@item.IdCategory" >@item.Name</button>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row mb-2 mx-3 block allnews">
+        @foreach (var item in Model.News){
+            String Desc = @item.Description;
+            if (@item.Description.Length > 53)
+            {
+                Desc = @item.Description.Substring(0, 42)+"...";
+            }
+            <div class="col-md-4 filter_@item.IdCategory">
+                <div class="row g-0 bg-dark border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col-auto p-4 pe-2 d-flex flex-column position-static">
+                        <a href="/Home/Article?ID=@item.IdNews" class="stretched-link text-primary"/>
+                        <strong class="d-inline-block mb-2 text-info">@Model.Category.Find(n => n.IdCategory == item.IdCategory).Name</strong>
+                        <h3 class="mb-0">@item.Header</h3>
+                        <div class="mb-1 text-muted">
+                            @item.Date.ToShortDateString()
+                            <span class="fs-6 m-3 my-0 rating">
+                                @if(@item.RateCount != 0){
+                                    @Math.Round(Convert.ToDecimal(@item.Rate / @item.RateCount))
+                                    <i class="fa-solid fa-star" style="color: #eeff00;"></i>
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                        <i class="fa-solid fa-star" style="color: #eeff00;"></i>
+                                    }
+                                
+                            </span>
+                        </div>
+                        <p class="card-text mb-auto">
+                            @Desc
+                        </p>
+                        <a href="/Home/Article?ID=@item.IdNews" class="stretched-link text-primary">Продолжить чтение</a>
+                    </div>
+                    @if (@Model.Media.FirstOrDefault(n => n.IdNews == item.IdNews) != null)
+                    {
+                        <div class="col-6 text-center d-none d-lg-block m-auto">
+                            <img class="bd-placeholder-img" src="@Model.Media.FirstOrDefault(n => n.IdNews == item.IdNews).Link" height="250" />
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <div class="row mb-2 mx-3 subnews block d-none">
+        @{
+            if (HttpContextAccessor.HttpContext.Session.Keys.Contains("AuthUser"))
+            {
+                var idClient = Model.Clients.FirstOrDefault(n => n.Email == HttpContextAccessor.HttpContext.Session.GetString("AuthUser").ToString()).IdClient;
+                var ClientTypes = Model.ClientTypes.FindAll(n => n.IdClient == idClient && n.IdRole == 1);
+                foreach(var channels in ClientTypes){
+                    foreach (var item in Model.News.FindAll(n => n.IdChannel == channels.IdChannel))
+                    {
+                        int lengthDesc = @item.Description.Length;
+                        String Desc = @item.Description;
+                        if (lengthDesc > 53)
+                        {
+                            Desc = @item.Description.Substring(0, 42) + "...";
+                        }
+                                <div class="col-md-4 filter_@item.IdCategory">
+                                    <div class="row g-0 bg-dark border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                                        <div class="col-6 p-4 pe-2 d-flex flex-column position-static">
+                                            <strong class="d-inline-block mb-2 text-info">@Model.Category.Find(n => n.IdCategory == item.IdCategory).Name</strong>
+                                            <h3 class="mb-0">@item.Header</h3>
+                                            <div class="mb-1 text-muted">@item.Date.ToShortDateString()</div>
+                                            <p class="card-text mb-auto">
+                                                @Desc
+                                            </p>
+                                            <a href="/Home/Article?ID=@item.IdNews" class="stretched-link text-primary">Продолжить чтение</a>
+                                        </div>
+                                        <div class="col-6 text-center d-none d-lg-block m-auto">
+                                            <img class="bd-placeholder-img" src="@Model.Media.FirstOrDefault(n => n.IdNews == item.IdNews).Link" height="250" />
+                                        </div>
+                                    </div>
+                                </div>
+                    }
+                }  
+            }else{
+                        <div class="alert alert-warning" role="alert">
+                            Войдите, чтобы посмотреть подписки
+                        </div>
+            }
+    }
+    </div>
+</div>
+<script>
+    $('.filter:contains("Сбросить")').removeClass("btn-outline-info").addClass("btn-outline-danger");
+    $(".filter").on("click", function(event){
+        if ($(event.target).text() == "Сбросить"){
+            $(".allnews").removeClass("d-none");
+            $(".subnews").addClass("d-none");
+            $('.filter').removeClass("active");
+            $(event.target).addClass("active");
+            let i = 0;
+            while (i < @Model.News.Count) {
+                $(".col-md-4").css('display', 'block');
+                i++;
+            }
+        } else if ($(event.target).text() == "Подписки"){
+            $(".allnews").addClass("d-none");
+            $(".subnews").removeClass("d-none");
+            $('.filter').removeClass("active");
+            $(event.target).addClass("active");
+        } else if ($(event.target).text() == "По рейтингу") {
+            $('.filter').removeClass("active");
+            $(event.target).addClass("active");
+            $('.allnews .col-md-4').sort(function (a, b) { // сортируем
+                return +$(b).find('.rating').text() - +$(a).find('.rating').text();
+            }).appendTo('.allnews');
+        }else {
+            $(".allnews").removeClass("d-none");
+            $(".subnews").addClass("d-none");
+            $('.filter').removeClass("active");
+                $(event.target).addClass("active");
+                let i = 0;
+                while (i < @Model.News.Count) {
+                    $(".col-md-4").css('display', 'none');
+                    i++;
+                }
+            $(".filter_" + event.target.id).css('display', 'block');
+        }
+    });
+</script>

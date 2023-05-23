@@ -1,0 +1,149 @@
+﻿@model PolyphoniaWeb.Models.ArticleNews;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Статья | Polyphonia";
+}
+<div class="container bg-black">
+    <div class="row">
+        <div class="col-9 bg-dark-500 pt-5 px-4">
+            <div class="blog-post">
+                <h2 class="blog-post-title align-baseline d-flex justify-content-between">
+                    @Model.news.Header <span class="fs-5 font-weight-normal">
+                        @if (Model.news.RateCount != 0)
+                        {
+                            @Math.Round(Convert.ToDecimal(@Model.news.Rate / Model.news.RateCount),1)
+                            <i class="fa-solid fa-star" style="color: #eeff00;"></i>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                            <i class="fa-solid fa-star" style="color: #eeff00;"></i>
+                        }
+                    </span>
+                </h2>
+                <p class="blog-post-meta">
+                    @Model.news.Date by <a href="/Channel/Channel?ID=@Model.news.IdChannel" class="t-indigo">@Model.channel_list.Find(n => n.IdChannel == @Model.news.IdChannel).Name</a>
+                </p>
+                <hr/>
+                @Html.Raw(Model.news.Description)
+                @foreach(var item in Model.Media_list){
+                    <input class="Links" value="@item.Link" hidden>
+                }
+            </div>
+        </div>
+        <aside class="col-md-3 blog-sidebar pt-5 px-4">
+            <h4>Похожие новости</h4>
+                @foreach (var item in Model.news_list.Where(n => n.IdCategory == Model.news.IdCategory))
+                {
+                    <div class="p-3 mb-3 bg-dark rounded">
+                        <a class="t-indigo" href="/Channel/Channel?ID=@Model.news.IdChannel">@Model.channel_list.FirstOrDefault(n=> n.IdChannel == @item.IdChannel).Name</a>
+                        <span class="mb-0 text-muted d-block float-end">@item.Date.ToShortDateString()</span>
+                        <a class="text-info" href="/Home/Article?ID=@item.IdNews"><h5 class="font-italic"><b>@item.Header</b></h5></a>
+                </div>
+                }
+        </aside>
+        @if (HttpContextAccessor.HttpContext.Session.Keys.Contains("AuthUser"))
+        {
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="stars">
+                        <form asp-controller="Home" asp-action="addRate" method="post" role="form">
+                            <input name="data" value="@Model.news.IdNews" hidden/>
+
+                            <input class="star star-5" type="submit" id="star-5" value="5" />
+
+                            <label class="star star-5" for="star-5"></label>
+
+                            <input class="star star-4" type="submit" id="star-4" value="4" />
+
+                            <label class="star star-4" for="star-4"></label>
+
+                            <input class="star star-3" type="submit" id="star-3" value="3" />
+
+                            <label class="star star-3" for="star-3"></label>
+
+                            <input class="star star-2" type="submit" id="star-2" value="2" />
+
+                            <label class="star star-2" for="star-2"></label>
+
+                            <input class="star star-1" type="submit" id="star-1" value="1" />
+
+                            <label class="star star-1" for="star-1"></label>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            }
+    </div>
+    <hr />
+    <div class="row p-3">
+        <h2>Комментарии</h2>
+        @if (HttpContextAccessor.HttpContext.Session.Keys.Contains("AuthUser")){
+                <form asp-controller="Home" asp-action="addComment" method="post" role="form">
+                    <div class="input-group mb-3">
+                        <input name="data" value="@Model.news.IdNews" hidden />
+                        <textarea class="form-control" name="data" placeholder="Напишите комментарий.." aria-describedby="button-addon1"></textarea>
+                        <button type="submit" class="btn btn-outline-success" id="button-addon1">Отправить</button>
+                    </div>
+                </form>
+        }else{
+        <div class="alert alert-warning" role="alert">
+            Войдите или зарегистрируйтесь, чтобы оставить комментарий или оценить статью
+        </div>
+        }
+    </div>
+    <div class="row p-4 pt-0">
+        @foreach(var item in Model.Comments){
+            var img = @Model.Clients.FirstOrDefault(n => n.IdClient == @item.IdClient).Avatar;
+            <div class="comment text-justify mb-2">
+                
+                @if(img.ToString() == "")
+                {
+                    <img src="~/img/blank_profile.png" class="rounded-circle border-0" width="50" height="50">
+                }
+                else
+                {
+                    <img src="@img" class="rounded-circle border-0" width="50" height="50">
+                }
+                <h4 class="d-inline-block align-bottom mx-1">@Model.Clients.FirstOrDefault(n => n.IdClient == @item.IdClient).Name</h4>
+                @*<span class="d-inline-block">- 20 October, 2018</span>*@
+                @*<br>*@
+                @{
+                    List<String> filter = new List<String>() { "img", "video", "track", "iframe", "svg","source","canvas","map","figure","figcaption","area","embed","audio" };
+                    var text = @item.Text;
+                    var newstring = "";
+                    foreach (var c in filter)
+                    {
+                        newstring = text.Replace(c,String.Empty);
+                        newstring = text.Replace(c.ToUpper(), String.Empty);
+                    }
+                                <p>@Html.Raw(newstring)</p>
+                }
+            </div>
+        }
+    </div>
+</div>
+<script>
+    var mediaList = [];
+    $(".Links").each(function(index,element){
+        mediaList.push($(element).val());
+    });
+    $('.blog-post img').each(function(index, element){
+        $(element).attr("class", "img-blog w-75");
+        $(element).attr("src",mediaList[index]);
+        $(element).wrap("<div class='text-center'></div>");
+        $(element).before("<br>");
+        $(element).after("<br>");
+    });
+    $('.blog-post a').each(function(index,element){
+        $(element).attr("href",$(element).text());
+    });
+    $(".star").on("click", function(){
+        $(".star").each(function(index,element){
+            $(element).removeAttr("name");
+        });
+        $(this).attr("name","data");
+    });
+</script>

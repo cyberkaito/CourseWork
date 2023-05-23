@@ -1,0 +1,86 @@
+﻿@model PolyphoniaWeb.Models.ChannelModel;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = Model.CurrentChannel.Name + " | Polyphonia";
+    var ownerID = Model.ClientTypes.FirstOrDefault(n => n.IdChannel == Model.CurrentChannel.IdChannel && n.IdRole == 2).IdClient;
+}
+<div class="row m-0 channel-page">
+    <div class="col-md-4 bg-dark border-right channel-info">
+        <div class="d-flex flex-column align-items-center text-center py-4 pb-0">
+            <div class="d-block overflow-hidden">
+                <img height="120px" src="@Model.CurrentChannel.Avatar" />
+            </div>
+            <span class="h5 py-3 pb-0">@Model.CurrentChannel.Name</span>
+            <span class="align-self-start">Владелец: <a href="/Profile/Profile?ID=@ownerID">@Model.Clients.FirstOrDefault(n => n.IdClient == ownerID).Name</a></span>
+            <span class="py-3 px-2">@Model.CurrentChannel.Description</span>
+            @if (HttpContextAccessor.HttpContext.Session.Keys.Contains("AuthUser"))
+            {
+                var user = Model.Clients.FirstOrDefault(n => n.Email == HttpContextAccessor.HttpContext.Session.GetString("AuthUser"));
+                <div class="d-flex align-items-baseline">
+                    @if (Model.ClientTypes.FindAll(n => n.IdChannel == Model.CurrentChannel.IdChannel && n.IdClient == user.IdClient && n.IdRole == 1).Count == 0)
+                    {
+                        <a class="btn btn-success" asp-controller="Channel" asp-action="toggleSubscribe">Подписаться</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-danger" href="/Channel/Channel?ID=@user.IdClient&&role=0">Отписаться </a>
+                    }
+                    <span class="fs-5 m-3 my-0">
+                        @Math.Round(Convert.ToDecimal(@Model.CurrentChannel.Rate / Model.CurrentChannel.RateCount),1)
+                        <i class="fa-solid fa-star" style="color: #eeff00;"></i>
+                    </span>
+                </div>
+                <span class="text-white-50">@Model.ClientTypes.FindAll(n => n.IdChannel == Model.CurrentChannel.IdChannel && n.IdRole == 1).Count подписчиков</span>
+                    <form asp-controller="Channel" asp-action="addRate" method="post" role="form">
+                        <input name="data" value="@Model.CurrentChannel.IdChannel" hidden />
+
+                        <input class="star star-5" type="submit" id="star-5" value="5" />
+
+                        <label class="star star-5" for="star-5"></label>
+
+                        <input class="star star-4" type="submit" id="star-4" value="4" />
+
+                        <label class="star star-4" for="star-4"></label>
+
+                        <input class="star star-3" type="submit" id="star-3" value="3" />
+
+                        <label class="star star-3" for="star-3"></label>
+
+                        <input class="star star-2" type="submit" id="star-2" value="2" />
+
+                        <label class="star star-2" for="star-2"></label>
+
+                        <input class="star star-1" type="submit" id="star-1" value="1" />
+
+                        <label class="star star-1" for="star-1"></label>
+                    </form>
+                
+            }
+        </div>
+    </div>
+    <div class="col-md-6 border-right m-auto">
+        @foreach(var item in Model.News.FindAll(n => n.IdChannel == Model.CurrentChannel.IdChannel)){
+@*            String Desc = @item.Description;
+            if (@item.Description.Length > 100)
+            {
+                Desc = @item.Description.Substring(0, 92) + "...";
+            }*@
+            <div class="card bg-black mb-3">
+                <div class="row g-0 align-items-center">
+                    <div class="col-md-4">
+                        <img src="@Model.Media.FirstOrDefault(n => n.IdNews == item.IdNews).Link" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <p class="card-text m-0"><small class="text-muted">@item.Date</small></p>
+                            <h5 class="card-title">@item.Header</h5>
+                            @*<p class="card-text">@Desc</p>*@
+                            <p class="text-end"><a href="/Home/Article?ID=@item.IdNews">Читать далее..</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
