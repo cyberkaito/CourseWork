@@ -2,7 +2,6 @@ package com.example.polyphonia;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,17 +9,17 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -39,6 +38,7 @@ public class NewsActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private ListAdapter adapter;
     private Integer idNews;
+    private ImageSlider imageSlider;
     private Root.News news;
     private PaperDb paper = new PaperDb();
     private int ClientID;
@@ -62,6 +62,7 @@ public class NewsActivity extends AppCompatActivity {
         rating = findViewById(R.id.rating);
         textInputLayout = findViewById(R.id.textInputLayout);
         commentText = findViewById(R.id.textInput);
+        imageSlider = findViewById(R.id.image_slider);
         ClientID = paper.getClient().idClient;
 
         this.setTitle("Статья №"+String.valueOf(idNews));
@@ -142,6 +143,28 @@ public class NewsActivity extends AppCompatActivity {
                                 intent.putExtra("idChannel",channel.idChannel);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 getApplicationContext().startActivity(intent);
+                            }
+                        });
+                        Call<ArrayList<Root.Media>> getMedia = appInterface.getMediaList();
+                        getMedia.enqueue(new Callback<ArrayList<Root.Media>>() {
+                            @RequiresApi(api = Build.VERSION_CODES.N)
+                            @Override
+                            public void onResponse(Call<ArrayList<Root.Media>> call, Response<ArrayList<Root.Media>> response) {
+                                if(response.isSuccessful()){
+                                    ArrayList<Root.Media> mediaArrayList = (ArrayList<Root.Media>) response.body().stream().filter(n -> n.idNews == idNews).collect(Collectors.toList());
+                                    ArrayList<SlideModel> imageList = new ArrayList<>();
+                                    for(Root.Media media : mediaArrayList){
+                                        imageList.add(new SlideModel(media.link, ScaleTypes.CENTER_CROP));
+                                    }
+                                    imageSlider.setImageList(imageList);
+                                }else{
+                                    Toast.makeText(getApplicationContext(),"Ошибка загрузки категории", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ArrayList<Root.Media>> call, Throwable t) {
+                                Toast.makeText(getApplicationContext(),"Ошибка загрузки фотографий", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

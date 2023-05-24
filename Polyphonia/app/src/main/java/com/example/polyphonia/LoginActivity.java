@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.polyphonia.databinding.ActivityLoginBinding;
 import java.util.ArrayList;
 import io.paperdb.Paper;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,15 +61,29 @@ public class LoginActivity extends AppCompatActivity {
                         if(response.isSuccessful()) {
                             ArrayList<Root.Clients> listClients = response.body();
                             Root.Clients client = listClients.stream()
-                                    .filter(item -> item.email.contentEquals(login.getText().toString().trim()) && item.key.contentEquals(password.getText().toString().trim()))
+                                    .filter(item -> item.email.contentEquals(login.getText().toString().trim()))
                                     .findFirst()
                                     .orElse(null);
                             if(client != null) {
-                                paper.setClient(client);
-                                Intent intent = new Intent(view.getContext(),MainActivity.class);
-                                startActivity(intent);
+                                appInterface.Auth(login.getText().toString(), password.getText().toString()).enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if(response.code() == 200){
+                                            paper.setClient(client);
+                                            Intent intent = new Intent(view.getContext(),MainActivity.class);
+                                            startActivity(intent);
+                                        }else{
+                                            Toast.makeText(getApplicationContext(),"Неверный пароль",Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        Toast.makeText(getApplicationContext(),"Ошибка со стороны сервера",Toast.LENGTH_LONG).show();
+                                    }
+                                });
                             }else{
-                                Toast.makeText(getApplicationContext(),"Неправильный логин или пароль",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"Пользователь с данной почтой не найден",Toast.LENGTH_LONG).show();
                             }
                         }else{
                             Toast.makeText(getApplicationContext(),"Ошибка со стороны сервера",Toast.LENGTH_LONG).show();

@@ -2,7 +2,9 @@ package com.example.polyphonia;
 
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
@@ -12,6 +14,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface AppInterface {
     @GET("Clients")
@@ -23,7 +26,8 @@ public interface AppInterface {
     Call<Root.Clients> postClient(@Body Root.Clients client);
     @DELETE("Clients/{id}")
     Call<Root.Clients> deleteClient(@Path("id") int id);
-
+    @GET("Clients/Auth")
+    Call<ResponseBody> Auth(@Query("login") String login, @Query("password") String password);
 
     @GET("News")
     Call<ArrayList<Root.News>> getNewsList();

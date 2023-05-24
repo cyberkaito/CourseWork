@@ -101,6 +101,7 @@ input[role = "switch"]{
 .filters button{
     font-size:1rem !important;
 }
+
 .loginup {
     visibility: hidden;
     position: absolute;
@@ -182,7 +183,15 @@ input[role = "switch"]{
 .bg-dark-500{
     background:rgb(24, 24, 24);
 }
-
+.stylying-article{
+    padding-bottom:50px;
+}
+.stylying-article li {
+    padding: 0px;
+}
+.stylying-article h1,h2,h3,h4,h5,h6 {
+    margin:10px 0px;
+}
 
 
 

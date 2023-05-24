@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         Paper.init(this);
         View view = binding.getRoot();
         BottomNavigationView navView = findViewById(R.id.nav_view);

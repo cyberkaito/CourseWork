@@ -105,6 +105,19 @@
             app:layout_constraintTop_toBottomOf="@+id/header" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.denzcoskun.imageslider.ImageSlider
+            android:id="@+id/image_slider"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:iss_auto_cycle="true"
+            app:iss_delay="0"
+            android:layout_margin="20dp"
+            app:iss_error_image="@drawable/error"
+            app:iss_period="1000"
+            app:layout_constraintBottom_toTopOf="@+id/ratingBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
         <RatingBar
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
@@ -119,19 +132,20 @@
             app:layout_constraintBottom_toTopOf="@+id/list_view"
             app:layout_constraintEnd_toStartOf="@+id/rating"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/image_slider" />
 
         <TextView
             android:id="@+id/rating"
-            android:layout_marginEnd="55dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="23dp"
+            android:layout_marginEnd="55dp"
             android:text="0.0"
             android:textColor="#F8F8F8"
             android:textSize="30dp"
+            app:layout_constraintBottom_toTopOf="@+id/list_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/image_slider" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_view"

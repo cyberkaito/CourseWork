@@ -1,10 +1,12 @@
 ﻿@model PolyphoniaWeb.Models.AccountModel;
+@{
+    ViewData["Title"] = ClientData.Name + " | Polyphonia";
+}
 <div class="container bg-dark account mt-5">
     @*Кнопки для профиля*@
     <div class="row my-3">
         <div class="col-10">
             <a class="btn btn-black text-white" onclick="profileBtn()">Профиль</a>
-            <a class="btn btn-black text-white" href="/Profile/Profile?ID=@ClientData.ID">Посмотреть профиль</a>
             <a class="btn btn-black text-white" onclick="channelBtn()">Канал</a>
         </div>
     </div>

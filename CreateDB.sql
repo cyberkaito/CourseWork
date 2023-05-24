@@ -33,6 +33,10 @@ create table [dbo].[Client]
 	constraint [UQ_Email] unique ([Email])
 )
 go
+
+alter table [dbo].[Client] alter column [Key] [varchar] (Max) not null
+go
+
 create table [dbo].[Channel]
 (
 	[ID_Channel] [int] not null identity(1,1),

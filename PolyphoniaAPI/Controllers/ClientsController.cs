@@ -31,6 +31,30 @@ namespace PolyphoniaAPI.Controllers
             return await _context.Clients.ToListAsync();
         }
 
+        [HttpGet("Auth")]
+        public async Task<ActionResult<IEnumerable<Client>>> GetClients(string? login, string? password)
+        {
+            if (login == null | password == null)
+            {
+                return NotFound();
+            }
+
+            Client client = _context.Clients.ToList().FirstOrDefault(n => n.Email == login);
+            if(client == null)
+            {
+                return NotFound();
+            }
+
+            KeyHandle keyHandle = new KeyHandle();
+
+            bool state = keyHandle.VerifyHashedPassword(client.Key, password);
+            if (state)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
         // GET: api/Clients/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Client>> GetClient(int? id)
@@ -89,6 +113,8 @@ namespace PolyphoniaAPI.Controllers
           {
               return Problem("Entity set 'PolyphoniaDatabaseContext.Clients'  is null.");
           }
+            KeyHandle keyHandle = new KeyHandle();
+            client.Key = keyHandle.HashPassword(client.Key);
             _context.Clients.Add(client);
             await _context.SaveChangesAsync();
 

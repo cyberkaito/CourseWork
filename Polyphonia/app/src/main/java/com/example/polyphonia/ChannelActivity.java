@@ -59,7 +59,6 @@ public class ChannelActivity extends AppCompatActivity {
 
         Call<Root.Channels> getChannel = appInterface.getChannel(idChannel);
         Call<ArrayList<Root.News>> getNews = appInterface.getNewsList();
-        Call<ArrayList<Root.ClientTypes>> getClientTypes = appInterface.getClientTypesList();
         getChannel.enqueue(new Callback<Root.Channels>() {
             @Override
             public void onResponse(Call<Root.Channels> call, Response<Root.Channels> response) {
@@ -98,6 +97,59 @@ public class ChannelActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Ошибка сервера", Toast.LENGTH_LONG).show();
             }
         });
+        updateSub();
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+                if(isSub == true){
+                    Root.ClientTypes subClient =  clientTypes.stream().filter(n -> n.idClient == ClientID & n.idChannel == idChannel & n.idRole == 1 ).findFirst().get();
+                    if(subClient != null){
+                        Call<Root.ClientTypes> deleteClientTypes = appInterface.deleteClientType(subClient.idClientType);
+                        deleteClientTypes.enqueue(new Callback<Root.ClientTypes>() {
+                            @Override
+                            public void onResponse(Call<Root.ClientTypes> call, Response<Root.ClientTypes> response) {
+                                if(response.isSuccessful()){
+                                    Toast.makeText(getApplicationContext(),"Вы отписались от канала", Toast.LENGTH_LONG).show();
+                                    updateSub();
+                                }else{
+                                    Toast.makeText(getApplicationContext(),"Не удалось отписаться от канала", Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Root.ClientTypes> call, Throwable t) {
+                                Toast.makeText(getApplicationContext(),"Не удалось отписаться от канала", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Не удалось отписаться от канала", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Root.ClientTypes newClientTypes = new Root.ClientTypes(ClientID, idChannel, 1);
+                    Call<Root.ClientTypes> postClientType = appInterface.postClientType(newClientTypes);
+                    postClientType.enqueue(new Callback<Root.ClientTypes>() {
+                        @Override
+                        public void onResponse(Call<Root.ClientTypes> call, Response<Root.ClientTypes> response) {
+                            if(response.isSuccessful()){
+                                Toast.makeText(getApplicationContext(),"Вы подписались на канал", Toast.LENGTH_LONG).show();
+                                updateSub();
+                            }else{
+                                Toast.makeText(getApplicationContext(),"Не удалось подписаться на канал", Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Root.ClientTypes> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(),"Не удалось подписаться на канал", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+    private void updateSub(){
+        Call<ArrayList<Root.ClientTypes>> getClientTypes = appInterface.getClientTypesList();
         getClientTypes.enqueue(new Callback<ArrayList<Root.ClientTypes>>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -121,53 +173,6 @@ public class ChannelActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ArrayList<Root.ClientTypes>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(),"Ошибка сервера", Toast.LENGTH_LONG).show();
-            }
-        });
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-                if(isSub == true){
-                    Root.ClientTypes subClient =  clientTypes.stream().filter(n -> n.idClient == ClientID & n.idChannel == idChannel & n.idRole == 1 ).findFirst().get();
-                    if(subClient != null){
-                        Call<Root.ClientTypes> deleteClientTypes = appInterface.deleteClientType(subClient.idClientType);
-                        deleteClientTypes.enqueue(new Callback<Root.ClientTypes>() {
-                            @Override
-                            public void onResponse(Call<Root.ClientTypes> call, Response<Root.ClientTypes> response) {
-                                if(response.isSuccessful()){
-                                    Toast.makeText(getApplicationContext(),"Вы отписались от канала", Toast.LENGTH_LONG).show();
-                                }else{
-                                    Toast.makeText(getApplicationContext(),"Не удалось отписаться от канала", Toast.LENGTH_LONG).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Root.ClientTypes> call, Throwable t) {
-                                Toast.makeText(getApplicationContext(),"Не удалось отписаться от канала", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }else{
-                        Toast.makeText(getApplicationContext(),"Не удалось отписаться от канала", Toast.LENGTH_LONG).show();
-                    }
-                }else{
-                    Root.ClientTypes newClientTypes = new Root.ClientTypes(ClientID, idChannel, 1);
-                    Call<Root.ClientTypes> postClientType = appInterface.postClientType(newClientTypes);
-                    postClientType.enqueue(new Callback<Root.ClientTypes>() {
-                        @Override
-                        public void onResponse(Call<Root.ClientTypes> call, Response<Root.ClientTypes> response) {
-                            if(response.isSuccessful()){
-                                Toast.makeText(getApplicationContext(),"Вы подписались на канал", Toast.LENGTH_LONG).show();
-                            }else{
-                                Toast.makeText(getApplicationContext(),"Не удалось подписаться на канал", Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Root.ClientTypes> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(),"Не удалось подписаться на канал", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
             }
         });
     }

@@ -26,10 +26,12 @@
                     @Model.news.Date by <a href="/Channel/Channel?ID=@Model.news.IdChannel" class="t-indigo">@Model.channel_list.Find(n => n.IdChannel == @Model.news.IdChannel).Name</a>
                 </p>
                 <hr/>
-                @Html.Raw(Model.news.Description)
+                <div class="stylying-article">
+                @Html.Raw(Model.news.Description) 
                 @foreach(var item in Model.Media_list){
                     <input class="Links" value="@item.Link" hidden>
                 }
+                </div>
             </div>
         </div>
         <aside class="col-md-3 blog-sidebar pt-5 px-4">

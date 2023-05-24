@@ -12,7 +12,7 @@
                 <img height="120px" src="@Model.CurrentChannel.Avatar" />
             </div>
             <span class="h5 py-3 pb-0">@Model.CurrentChannel.Name</span>
-            <span class="align-self-start">Владелец: <a href="/Profile/Profile?ID=@ownerID">@Model.Clients.FirstOrDefault(n => n.IdClient == ownerID).Name</a></span>
+            <span class="align-self-start">Владелец: @Model.Clients.FirstOrDefault(n => n.IdClient == ownerID).Name</span>
             <span class="py-3 px-2">@Model.CurrentChannel.Description</span>
             @if (HttpContextAccessor.HttpContext.Session.Keys.Contains("AuthUser"))
             {
@@ -26,10 +26,13 @@
                     {
                         <a class="btn btn-danger" href="/Channel/Channel?ID=@user.IdClient&&role=0">Отписаться </a>
                     }
-                    <span class="fs-5 m-3 my-0">
-                        @Math.Round(Convert.ToDecimal(@Model.CurrentChannel.Rate / Model.CurrentChannel.RateCount),1)
-                        <i class="fa-solid fa-star" style="color: #eeff00;"></i>
-                    </span>
+                    @if(@Model.CurrentChannel.Rate != 0 & Model.CurrentChannel.RateCount != 0)
+                    {
+                        <span class="fs-5 m-3 my-0">
+                            @Math.Round(Convert.ToDecimal(@Model.CurrentChannel.Rate / Model.CurrentChannel.RateCount),1)
+                            <i class="fa-solid fa-star" style="color: #eeff00;"></i>
+                        </span>
+                    }
                 </div>
                 <span class="text-white-50">@Model.ClientTypes.FindAll(n => n.IdChannel == Model.CurrentChannel.IdChannel && n.IdRole == 1).Count подписчиков</span>
                     <form asp-controller="Channel" asp-action="addRate" method="post" role="form">

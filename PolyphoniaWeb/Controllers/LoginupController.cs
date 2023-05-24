@@ -69,17 +69,24 @@ namespace PolyphoniaWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogIn(List<string> data)
         {
-                Client client = await db.Clients.FirstOrDefaultAsync(u => u.Email == data[1] && u.Key == data[2]);
-                if (client != null)
+            KeyHandle keyHandle = new KeyHandle();
+            Client client = await db.Clients.FirstOrDefaultAsync(u => u.Email == data[1]);
+            if(client == null)
+            {
+                return BadRequest("Пользователь с таким email не найден");
+            }
+            bool state = keyHandle.VerifyHashedPassword(client.Key, data[2]);
+            if (state)
                 {
                     HttpContext.Session.SetString("AuthUser", client.Email);
                     await Authenticate(client.Email);
-                }
                 if (db.ClientTypes.Any(n => n.IdClient == client.IdClient && n.IdRole == 3))
                 {
                     return Redirect("~/Admin/Admin");
                 }
-            return Redirect("~/Home/Index");
+                return Redirect("~/Home/Index");
+            }
+            return BadRequest("Неверный логин или пароль");
         }
         private async Task Authenticate(string email)
         {
