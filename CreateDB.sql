@@ -25,16 +25,13 @@ create table [dbo].[Client]
 	[ID_Client] [int] not null identity(1,1),
 	[Name] [varchar] (12) not null,
 	[Email] [varchar] (30) not null,
-	[Key] [varchar] (20) not null,
+	[Key] [varchar] (Max) not null,
 	[Avatar] [varchar] (MAX) null,
 	[Bio] [varchar] (45) null
 	constraint [PK_ID_Client] primary key clustered ([ID_Client] ASC) on [PRIMARY],
 	constraint [UQ_Name] unique ([Name]),
 	constraint [UQ_Email] unique ([Email])
 )
-go
-
-alter table [dbo].[Client] alter column [Key] [varchar] (Max) not null
 go
 
 create table [dbo].[Channel]
